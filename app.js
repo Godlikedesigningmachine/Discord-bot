@@ -86,3 +86,9 @@ app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`)
 client.once('ready', () => {
     console.log('Bot is online!');
 });
+
+//faltu stuff
+// Function to log a message every 60 seconds
+setInterval(() => {
+    console.log('Keep-alive ping: skibidi');
+}, 60 * 1000); // 60 seconds in milliseconds
