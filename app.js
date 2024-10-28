@@ -91,3 +91,12 @@ client.once('ready', () => {
 client.login(DISCORD_TOKEN).catch(error => {
     console.error('Failed to log in:', error);
 });
+
+client.once('ready', () => {
+    console.log('Bot is online!');
+
+    // Log "skibidi" every 60 seconds
+    setInterval(() => {
+        console.log('skibidi');
+    }, 60 * 1000); // 60 seconds in milliseconds
+});
