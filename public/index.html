@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload File to Discord - DedSec Style</title>
+    <style>
+        /* Previous CSS styles */
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #1e1e1e;
+            color: #e1e1e1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('https://wallpapercave.com/wp/wp4479687.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            overflow: hidden;
+        }
+        .container {
+            background-color: rgba(30, 30, 30, 0.8);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+            width: 400px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+        }
+        input[type="file"] {
+            margin: 20px 0;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .error {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload a File</h1>
+        <form id="uploadForm" action="http://localhost:3000/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" id="fileInput" required>
+            <button type="submit">Upload</button>
+        </form>
+        <div id="responseMessage" class="message"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const responseMessage = document.getElementById('responseMessage');
+        const fileInput = document.getElementById('fileInput');
+
+        // Maximum file size in bytes (25 MB)
+        const MAX_FILE_SIZE = 25 * 1024 * 1024;
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            // Check file size
+            if (fileInput.files[0] && fileInput.files[0].size > MAX_FILE_SIZE) {
+                responseMessage.textContent = 'File size exceeds 25 MB limit. Please choose a smaller file.';
+                responseMessage.className = 'message error';
+                return; // Stop the submission
+            }
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Log the response status and text for debugging
+                console.log('Response status:', response.status);
+                const text = await response.text();
+                console.log('Response text:', text); // Log the response text
+
+                if (response.ok) {
+                    responseMessage.textContent = text;
+                    responseMessage.className = 'message'; // Reset class for success
+                } else {
+                    responseMessage.textContent = text;
+                    responseMessage.className = 'message error'; // Set error class
+                }
+            } catch (error) {
+                responseMessage.textContent = 'Error uploading file. Please try again.';
+                responseMessage.className = 'message error'; // Set error class
+            }
+        });
+    </script>
+</body>
+</html>
