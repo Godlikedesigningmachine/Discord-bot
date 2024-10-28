@@ -82,6 +82,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
 
+const http = require('http');
+
 // Function to log "skibidi" every 60 seconds
 function startLogging() {
     setInterval(() => {
@@ -89,5 +91,20 @@ function startLogging() {
     }, 60 * 1000); // 60 seconds in milliseconds
 }
 
-// Start the logging function
+// Function to keep the application alive by pinging a URL
+function keepAlive(url) {
+    setInterval(() => {
+        http.get(url, (res) => {
+            console.log(`Keep-alive ping sent: ${res.statusCode}`);
+        }).on('error', (e) => {
+            console.error(`Error sending keep-alive: ${e.message}`);
+        });
+    }, 5 * 60 * 1000); // Ping every 5 minutes (300,000 milliseconds)
+}
+
+// Replace this URL with your application URL
+const KEEP_ALIVE_URL = 'http://localhost:300'; // Change this to your actual endpoint
+
+// Start logging and keep-alive
 startLogging();
+keepAlive(KEEP_ALIVE_URL);
