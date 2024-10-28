@@ -91,3 +91,27 @@ client.once('ready', () => {
 client.login(DISCORD_TOKEN).catch(error => {
     console.error('Failed to log in:', error);
 });
+
+// prevent roll back hahahahahaha
+
+const http = require('http');
+
+// Keep-alive endpoint
+app.get('/keep-alive', (req, res) => {
+    res.send('I am alive!');
+});
+
+// Start the keep-alive pings after the server starts
+const keepAlive = () => {
+    setInterval(() => {
+        http.get(`http://localhost:${PORT}/keep-alive`, (response) => {
+            console.log(`Ping response: ${response.statusCode}`);
+        });
+    }, 300000); // Ping every 5 minutes
+};
+
+// Start the server and the keep-alive pings
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+    keepAlive(); // Call the keep-alive function
+});
