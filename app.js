@@ -82,21 +82,12 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
 
-// Log a message when the bot is ready
-client.once('ready', () => {
-    console.log('Bot is online!');
-});
-
-// Log in to Discord with the decrypted token
-client.login(DISCORD_TOKEN).catch(error => {
-    console.error('Failed to log in:', error);
-});
-
-client.once('ready', () => {
-    console.log('Bot is online!');
-
-    // Log "skibidi" every 60 seconds
+// Function to log "skibidi" every 60 seconds
+function startLogging() {
     setInterval(() => {
         console.log('skibidi');
     }, 60 * 1000); // 60 seconds in milliseconds
-});
+}
+
+// Start the logging function
+startLogging();
