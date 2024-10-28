@@ -1,0 +1,19 @@
+{
+  "name": "discord-file-upload-bot",
+  "version": "1.0.0",
+  "description": "A Discord bot that uploads files to a Discord channel via a web interface.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.0.0",
+    "express": "^4.17.1",
+    "multer": "^1.4.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "author": "Honix Development",
+  "license": "MIT"
+}
