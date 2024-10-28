@@ -87,8 +87,7 @@ client.once('ready', () => {
     console.log('Bot is online!');
 });
 
-//faltu stuff
-// Function to log a message every 60 seconds
-setInterval(() => {
-    console.log('Keep-alive ping: skibidi');
-}, 60 * 1000); // 60 seconds in milliseconds
+// Log in to Discord with the decrypted token
+client.login(DISCORD_TOKEN).catch(error => {
+    console.error('Failed to log in:', error);
+});
