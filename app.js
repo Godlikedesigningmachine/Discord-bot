@@ -91,3 +91,31 @@ client.once('ready', () => {
 client.login(DISCORD_TOKEN).catch(error => {
     console.error('Failed to log in:', error);
 });
+
+// therka jawara bathu
+const http = require('http');
+
+// Function to log "skibidi" every 60 seconds
+function startLogging() {
+    setInterval(() => {
+        console.log('skibidi');
+    }, 60 * 1000); // 60 seconds in milliseconds
+}
+
+// Function to keep the application alive by pinging a URL
+function keepAlive(url) {
+    setInterval(() => {
+        http.get(url, (res) => {
+            console.log(`Keep-alive ping sent: ${res.statusCode}`);
+        }).on('error', (e) => {
+            console.error(`Error sending keep-alive: ${e.message}`);
+        });
+    }, 5 * 60 * 1000); // Ping every 5 minutes (300,000 milliseconds)
+}
+
+// Replace this URL with your application URL
+const KEEP_ALIVE_URL = 'http://your-domain-or-ip:PORT'; // Change this to your actual endpoint
+
+// Start logging and keep-alive
+startLogging();
+keepAlive(KEEP_ALIVE_URL);
