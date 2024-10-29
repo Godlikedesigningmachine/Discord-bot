@@ -4,7 +4,7 @@
   "description": "A Discord bot that uploads files to a Discord channel via a web interface.",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node selfPing.js & node app.js"
   },
   "dependencies": {
     "discord.js": "^14.0.0",
