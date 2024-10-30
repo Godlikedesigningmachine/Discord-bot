@@ -5,7 +5,6 @@ const path = require('path');
 const fs = require('fs');
 
 // Encrypted Discord token (Base64 + Caesar cipher with a shift of 3)
-// Replace this with your actual token encrypted accordingly
 const ENCRYPTED_DISCORD_TOKEN = 'UFdMOFJXZjRQbUQ0UEdqM1BXXHxQR1h8UEQxSmxueERcMX1WRjQ8U2ldOEluU3pmfDVtfFNJVm52ZjNVNzxcXHJpMzlxOE16';
 const CHANNEL_ID = '1299754851391115316'; // Replace with your actual channel ID
 
@@ -13,7 +12,7 @@ const CHANNEL_ID = '1299754851391115316'; // Replace with your actual channel ID
 function decryptToken(encryptedToken) {
     // Decode from Base64
     const base64Decoded = Buffer.from(encryptedToken, 'base64').toString('utf-8');
-    
+
     // Reverse Caesar cipher (shift of 3)
     const decryptedToken = base64Decoded.split('').map(char => {
         return String.fromCharCode(char.charCodeAt(0) - 3);
@@ -36,7 +35,20 @@ const upload = multer({
 });
 
 // Initialize Discord client
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
+let client;
+function initClient() {
+    client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
+
+    // Log a message when the bot is ready
+    client.once('ready', () => {
+        console.log('Bot is online!');
+    });
+
+    // Log in to Discord with the bot token
+    client.login(DISCORD_TOKEN).catch(error => {
+        console.error('Failed to log in:', error);
+    });
+}
 
 // Function to send a file to a Discord channel
 async function sendFileToChannel(filePath, fileName) {
@@ -78,17 +90,22 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     }
 });
 
-// Start the Express server
-const PORT = 3000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
-
-// Log a message when the bot is ready
-client.once('ready', () => {
-    console.log('Bot is online!');
-});
-
 // Keep-Alive Endpoint
 app.get('/keep-alive', (req, res) => {
     console.log('Keep-alive request received.');
+
+    // Reinitialize the client if it's not already initialized or is offline
+    if (!client || !client.isReady()) {
+        console.log('Reinitializing the bot...');
+        initClient(); // Reinitialize the bot
+    }
+
     res.send('Bot is awake!');
+});
+
+// Start the Express server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+    initClient(); // Initialize the client when the server starts
 });
