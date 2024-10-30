@@ -87,9 +87,21 @@ client.once('ready', () => {
     console.log('Bot is online!');
 });
 
-// Log in to Discord with the decrypted token
-client.login(DISCORD_TOKEN).catch(error => {
-    console.error('Failed to log in:', error);
-});
+// skibid bop bop
+async function sendAndInstantDeleteMessage() {
+    try {
+        const channel = await client.channels.fetch(CHANNEL_ID);
+        const message = await channel.send('Keeping the bot awake!');
+        await message.delete(); // Immediately delete the message
+        console.log('Message sent and instantly deleted');
+        
+    } catch (error) {
+        console.error('Error sending or deleting message:', error);
+    }
+}
 
-// prevent roll back hahahahahaha
+// Set interval to run the function every 10 minutes
+setInterval(sendAndInstantDeleteMessage, 600000); // 10 minutes in milliseconds
+
+// Login the bot with decrypted token
+client.login(DISCORD_TOKEN);
