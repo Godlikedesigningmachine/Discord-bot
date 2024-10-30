@@ -86,21 +86,9 @@ app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`)
 client.once('ready', () => {
     console.log('Bot is online!');
 });
-// extra sman lalalalala
 
-const http = require('http');
-const PORT = process.env.PORT || 3000;
-
-// Function to ping the server at an interval
-function selfPing() {
-    setInterval(() => {
-        http.get(`http://localhost:${PORT}`, (res) => {
-            console.log('Self-pinged to prevent idling');
-        }).on('error', (err) => {
-            console.error('Self-ping error:', err.message);
-        });
-    }, 1 * 60 * 1000); // Ping every 14 minutes
-}
-
-// Start the ping when the app is ready
-selfPing();
+// Keep-Alive Endpoint
+app.get('/keep-alive', (req, res) => {
+    console.log('Keep-alive request received.');
+    res.send('Bot is awake!');
+});
